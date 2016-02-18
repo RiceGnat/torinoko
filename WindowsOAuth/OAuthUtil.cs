@@ -7,22 +7,39 @@ using Windows.Storage.Streams;
 
 namespace WindowsOAuth
 {
+	/// <summary>
+	/// Contains utility functions for OAuth.
+	/// </summary>
 	public static class OAuthUtil
 	{
+		/// <summary>
+		/// Gets a random 32-character alphanumeric string.
+		/// </summary>
+		/// <returns>A random 32-character alphanumeric string.</returns>
 		public static string GetNonce()
 		{
 			Random r = new Random();
 			byte[] buffer = new byte[32];
 			r.NextBytes(buffer);
-			return new Regex("[^0-9a-zA-Z]").Replace(Convert.ToBase64String(buffer), "");
+			return new Regex("[^0-9a-zA-Z]").Replace(Convert.ToBase64String(buffer), "0");
 		}
 
+		/// <summary>
+		/// Gets the current timestamp in seconds in Unix time.
+		/// </summary>
+		/// <returns>The timesetamp as a string.</returns>
 		public static string GetTimestamp()
 		{
 			TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return Convert.ToInt64(ts.TotalSeconds).ToString();
 		}
 
+		/// <summary>
+		/// Gets the signature for the given string.
+		/// </summary>
+		/// <param name="baseString">The base string to be signed.</param>
+		/// <param name="signingKey">The key used to sign the base string.</param>
+		/// <returns>The signature as a base 64 string.</returns>
 		public static string GetSignature(string baseString, string signingKey)
 		{
 			IBuffer keyMaterial = CryptographicBuffer.ConvertStringToBinary(signingKey, BinaryStringEncoding.Utf8);
@@ -33,6 +50,11 @@ namespace WindowsOAuth
 			return CryptographicBuffer.EncodeToBase64String(signature);
 		}
 
+		/// <summary>
+		/// Parse the response string from an OAuth request into its constituent parameters.
+		/// </summary>
+		/// <param name="response">The response string.</param>
+		/// <returns>An <see cref="OAuthParams"/> object containing the parameters in the response string.</returns>
 		public static OAuthParams ParseResponse(string response)
 		{
 			OAuthParams oAuth = new OAuthParams();
