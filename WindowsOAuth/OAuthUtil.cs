@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
@@ -31,16 +30,6 @@ namespace WindowsOAuth
 			IBuffer data = CryptographicBuffer.ConvertStringToBinary(baseString, BinaryStringEncoding.Utf8);
 			IBuffer signature = CryptographicEngine.Sign(key, data);
 			return CryptographicBuffer.EncodeToBase64String(signature);
-		}
-
-		public static OAuthParams ParseResponse(string response)
-		{
-			OAuthParams oAuth = new OAuthParams();
-			foreach (string[] kv in response.Split('&').Select(param => param.Split('=')))
-			{
-				oAuth.SetKey(kv[0], kv[1]);
-			}
-			return oAuth;
 		}
 	}
 }

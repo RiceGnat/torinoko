@@ -73,12 +73,12 @@ namespace Twitter.Authentication
 
 			AddSignature("POST", requestTokenUrl, oAuthParams);
 
-			string response = await HttpUtil.Post(requestTokenUrl, oAuthParams);
+			string response = await RequestUtil.Post(requestTokenUrl, oAuthParams);
 
 			if (String.IsNullOrEmpty(response))
 				throw new Exception("Failed getting request token.");
 
-			OAuthParams responseParams = OAuthUtil.ParseResponse(response);
+			OAuthParams responseParams = RequestUtil.ParseResponse(response);
 			RequestToken = responseParams.Token;
 			RequestTokenSecret = responseParams.TokenSecret;
 
@@ -92,12 +92,12 @@ namespace Twitter.Authentication
 		{
 			OAuthParams oAuthParams = new OAuthParams{ Token = RequestToken };
 
-			string response = await HttpUtil.WebAuthenticate(authenticateUrl, callbackUrl, oAuthParams);
+			string response = await RequestUtil.WebAuthenticate(authenticateUrl, callbackUrl, oAuthParams);
 
 			if (String.IsNullOrEmpty(response))
 				throw new Exception("Failed to authenticate user.");
 
-			OAuthParams responseParams = OAuthUtil.ParseResponse(response.Split('?')[1]);
+			OAuthParams responseParams = RequestUtil.ParseResponse(response.Split('?')[1]);
 
 			if (responseParams.Token != RequestToken)
 				throw new Exception("Authentication result and request token mismatch.");
@@ -117,12 +117,12 @@ namespace Twitter.Authentication
 
 			AddSignature("POST", accessTokenUrl, oAuthParams);
 
-			string response = await HttpUtil.Post(accessTokenUrl, oAuthParams);
+			string response = await RequestUtil.Post(accessTokenUrl, oAuthParams);
 
 			if (String.IsNullOrEmpty(response))
 				throw new Exception("Failed getting access token.");
 
-			OAuthParams responseParams = OAuthUtil.ParseResponse(response);
+			OAuthParams responseParams = RequestUtil.ParseResponse(response);
 			AccessToken = responseParams.Token;
 			AccessTokenSecret = responseParams.TokenSecret;
 			UserId = responseParams.GetKey("user_id");
@@ -143,7 +143,7 @@ namespace Twitter.Authentication
 
 			AddSignature("GET", requestUrl, oAuthParams);
 
-			return await HttpUtil.Get(requestUrl, oAuthParams, queryString);
+			return await RequestUtil.Get(requestUrl, oAuthParams, queryString);
 		}
 
 		public async Task<string> AuthorizedPost(string requestUrl, string postData)
@@ -153,7 +153,7 @@ namespace Twitter.Authentication
 
 			AddSignature("POST", requestUrl, oAuthParams);
 
-			return await HttpUtil.Post(requestUrl, oAuthParams, postData);
+			return await RequestUtil.Post(requestUrl, oAuthParams, postData);
 		}
 
 		public TwitterOAuth(ITwitterConsumerKeyStore keyStore)

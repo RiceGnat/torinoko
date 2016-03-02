@@ -108,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dialogs.cs" />
-    <Compile Include="HttpUtil.cs" />
+    <Compile Include="RequestUtil.cs" />
     <Compile Include="OAuthParams.cs" />
     <Compile Include="OAuthUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

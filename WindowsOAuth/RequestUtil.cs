@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Windows.Web.Http;
@@ -6,7 +7,7 @@ using Windows.Web.Http.Headers;
 
 namespace WindowsOAuth
 {
-	public class HttpUtil
+	public class RequestUtil
 	{
 		private static async Task ShowErrorDialog(string url, HttpStatusCode statusCode)
 		{
@@ -67,6 +68,16 @@ namespace WindowsOAuth
 			}
 
 			return null;
+		}
+
+		public static OAuthParams ParseResponse(string response)
+		{
+			OAuthParams oAuth = new OAuthParams();
+			foreach (string[] kv in response.Split('&').Select(param => param.Split('=')))
+			{
+				oAuth.SetKey(kv[0], kv[1]);
+			}
+			return oAuth;
 		}
 	}
 }

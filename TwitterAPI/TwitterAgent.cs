@@ -32,7 +32,9 @@ namespace Twitter
 
 		public async Task GetHomeTimeline()
 		{
-			await twitterAuth.AuthorizedGet(homeTimelineUrl, String.Empty);
+			string response = await twitterAuth.AuthorizedGet(homeTimelineUrl, String.Empty);
+
+			System.Diagnostics.Debug.WriteLine(response);
 		}
 
 		public TwitterAgent(ITwitterAuth twitterAuth)
