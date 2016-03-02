@@ -7,6 +7,9 @@ using WindowsOAuth;
 
 namespace Twitter.Authentication
 {
+	/// <summary>
+	/// Performs Twitter OAuth actions.
+	/// </summary>
 	public class TwitterOAuth : ITwitterAuth
 	{
 		private const string requestTokenUrl = "https://api.twitter.com/oauth/request_token";
@@ -16,22 +19,55 @@ namespace Twitter.Authentication
 
 		private ITwitterConsumerKeyStore keys;
 
+		/// <summary>
+		/// Gets the application's consumer key.
+		/// </summary>
 		public string ConsumerKey
 		{
 			get { return keys.ConsumerKey; }
 		}
 
+		/// <summary>
+		/// Gets the application's consumer secret.
+		/// </summary>
 		public string ConsumerSecret
 		{
 			get { return keys.ConsumerSecret; }
 		}
 
+		/// <summary>
+		/// Gets the request token received from the server.
+		/// </summary>
 		public string RequestToken { get; private set; }
+
+		/// <summary>
+		/// Gets the request token secret received from the server.
+		/// </summary>
 		public string RequestTokenSecret { get; private set; }
+
+		/// <summary>
+		/// Gets the token verifier received from the server.
+		/// </summary>
 		public string Verifier { get; private set; }
+
+		/// <summary>
+		/// Gets the access token received from the server.
+		/// </summary>
 		public string AccessToken { get; private set; }
+
+		/// <summary>
+		/// Gets the access token secret received from the server.
+		/// </summary>
 		public string AccessTokenSecret { get; private set; }
+
+		/// <summary>
+		/// Gets the user ID received from the server.
+		/// </summary>
 		public string UserId { get; private set; }
+
+		/// <summary>
+		/// Gets the screenname received from the server.
+		/// </summary>
 		public string ScreenName { get; private set; }
 
 		private OAuthParams GetNewRequestParams()
@@ -66,6 +102,9 @@ namespace Twitter.Authentication
 			oAuthParams.Signature = Uri.EscapeDataString(signature);
 		}
 
+		/// <summary>
+		/// Sends a request for a request token for this application.
+		/// </summary>
 		public async Task GetRequestToken()
 		{
 			OAuthParams oAuthParams = GetNewRequestParams();
@@ -88,6 +127,9 @@ namespace Twitter.Authentication
 #endif
 		}
 
+		/// <summary>
+		/// Prompts the user for authentication.
+		/// </summary>
 		public async Task AuthenticateUser()
 		{
 			OAuthParams oAuthParams = new OAuthParams{ Token = RequestToken };
@@ -109,6 +151,9 @@ namespace Twitter.Authentication
 #endif
 		}
 
+		/// <summary>
+		/// Exchanges the request token for an access token.
+		/// </summary>
 		public async Task GetAccessToken()
 		{
 			OAuthParams oAuthParams = GetNewRequestParams();
@@ -136,6 +181,12 @@ namespace Twitter.Authentication
 #endif
 		}
 
+		/// <summary>
+		/// Sends a GET request using the OAuth access token.
+		/// </summary>
+		/// <param name="requestUrl">The URL to send the request to.</param>
+		/// <param name="queryString">The query string to be appended to the request URL. Do not include the '?'.</param>
+		/// <returns>The response from the server as a string.</returns>
 		public async Task<string> AuthorizedGet(string requestUrl, string queryString)
 		{
 			OAuthParams oAuthParams = GetNewRequestParams();
@@ -146,6 +197,12 @@ namespace Twitter.Authentication
 			return await RequestUtil.Get(requestUrl, oAuthParams, queryString);
 		}
 
+		/// <summary>
+		/// Sends a POST request using the OAuth access token.
+		/// </summary>
+		/// <param name="requestUrl">The URL to send the request to.</param>
+		/// <param name="postData">The data to be included in the request body.</param>
+		/// <returns>The response from the server as a string.</returns>
 		public async Task<string> AuthorizedPost(string requestUrl, string postData)
 		{
 			OAuthParams oAuthParams = GetNewRequestParams();
@@ -156,6 +213,10 @@ namespace Twitter.Authentication
 			return await RequestUtil.Post(requestUrl, oAuthParams, postData);
 		}
 
+		/// <summary>
+		/// Creates a new <c>TwitterOAuth</c> instance with the provided consumer key and secret.
+		/// </summary>
+		/// <param name="keyStore">An object implementing <see cref="ITwitterConsumerKeyStore"/>.</param>
 		public TwitterOAuth(ITwitterConsumerKeyStore keyStore)
 		{
 			keys = keyStore;

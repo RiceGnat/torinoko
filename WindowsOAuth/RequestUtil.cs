@@ -7,6 +7,9 @@ using Windows.Web.Http.Headers;
 
 namespace WindowsOAuth
 {
+	/// <summary>
+	/// Contains utility functions to assist with making OAuth requests.
+	/// </summary>
 	public class RequestUtil
 	{
 		private static async Task ShowErrorDialog(string url, HttpStatusCode statusCode)
@@ -25,12 +28,20 @@ namespace WindowsOAuth
 			HttpResponseMessage response = await http.SendRequestAsync(request);
 			if (response.IsSuccessStatusCode)
 				return await response.Content.ReadAsStringAsync();
-			else {
+			else
+			{
 				await ShowErrorDialog(url, response.StatusCode);
 				return null;
 			}
 		}
 
+		/// <summary>
+		/// Makes a GET request asynchronously with the provided OAuth headers.
+		/// </summary>
+		/// <param name="url">The URL to send the request to.</param>
+		/// <param name="oAuthParams">The OAuth parameters that will be included in the request header.</param>
+		/// <param name="queryString">The query string that will be appended to the request URL. Do not include the '?'.</param>
+		/// <returns>The response from the server as a string.</returns>
 		public static async Task<string> Get(string url, OAuthParams oAuthParams, string queryString = null)
 		{
 			if (!String.IsNullOrWhiteSpace(queryString))
@@ -41,14 +52,27 @@ namespace WindowsOAuth
 			return await MakeRequest(url, oAuthParams, "GET");
 		}
 
+		/// <summary>
+		/// Makes a POST request asynchronously with the provided OAuth headers.
+		/// </summary>
+		/// <param name="url">The URL to send the request to.</param>
+		/// <param name="oAuthParams">The OAuth parameters that will be included in the request header.</param>
+		/// <param name="postData">The data to be included in the request body.</param>
+		/// <returns>The response from the server as a string.</returns>
 		public static async Task<string> Post(string url, OAuthParams oAuthParams, string postData = null)
 		{
 			return await MakeRequest(url, oAuthParams, "POST", postData);
 		}
 
+		/// <summary>
+		/// Directs the user to a URL for authentication, then captures the server redirect and returns control to the application.
+		/// </summary>
+		/// <param name="startUrl">The URL to direct the user to for authentication.</param>
+		/// <param name="endUrl">The callback URL which the server will redirect to following successful authentication.</param>
+		/// <param name="oAuthParams">The OAuth parameters to send to the authentication URL as a query string.</param>
+		/// <returns>The captured request from the server to the callback URL.</returns>
 		public static async Task<string> WebAuthenticate(string startUrl, string endUrl, OAuthParams oAuthParams)
 		{
-			// WebAuthenticationBroker will open the Twitter login screen and capture the redirect after the user logs in
 			string url = String.Format("{0}?{1}", startUrl, oAuthParams.GetParamString());
 			Uri startUri = new Uri(url, UriKind.Absolute);
 			Uri endUri = new Uri(endUrl, UriKind.Absolute);
@@ -70,6 +94,11 @@ namespace WindowsOAuth
 			return null;
 		}
 
+		/// <summary>
+		/// Parse the response string from an OAuth request into its constituent parameters.
+		/// </summary>
+		/// <param name="response">The response string.</param>
+		/// <returns>An <see cref="OAuthParams"/> object containing the parameters in the response string.</returns>
 		public static OAuthParams ParseResponse(string response)
 		{
 			OAuthParams oAuth = new OAuthParams();
