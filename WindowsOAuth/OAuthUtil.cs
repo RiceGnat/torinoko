@@ -48,20 +48,5 @@ namespace WindowsOAuth
 			IBuffer signature = CryptographicEngine.Sign(key, data);
 			return CryptographicBuffer.EncodeToBase64String(signature);
 		}
-
-		/// <summary>
-		/// Parse the response string from an OAuth request into its constituent parameters.
-		/// </summary>
-		/// <param name="response">The response string.</param>
-		/// <returns>An <see cref="OAuthParams"/> object containing the parameters in the response string.</returns>
-		public static OAuthParams ParseResponse(string response)
-		{
-			OAuthParams oAuth = new OAuthParams();
-			foreach (string[] kv in response.Split('&').Select(param => param.Split('=')))
-			{
-				oAuth.SetKey(kv[0], kv[1]);
-			}
-			return oAuth;
-		}
 	}
 }

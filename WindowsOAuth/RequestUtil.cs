@@ -14,7 +14,7 @@ namespace WindowsOAuth
 	{
 		private static async Task ShowErrorDialog(string url, HttpStatusCode statusCode)
 		{
-			await NotifyUser.ShowDialog(String.Format("Call to {0} failed. ({1}: {2})", url, (uint)statusCode, statusCode));
+			await Dialogs.ShowDialog(String.Format("Call to {0} failed. ({1}: {2})", url, (uint)statusCode, statusCode));
 		}
 
 		private static async Task<string> MakeRequest(string url, OAuthParams oAuthParams, string method, string postData = null)
@@ -88,7 +88,7 @@ namespace WindowsOAuth
 			}
 			else
 			{
-				await NotifyUser.ShowDialog("An error occured during authentication.");
+				await Dialogs.ShowDialog("An error occured during authentication.");
 			}
 
 			return null;

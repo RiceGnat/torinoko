@@ -4,7 +4,7 @@ using Windows.UI.Popups;
 
 namespace WindowsOAuth
 {
-	public static class NotifyUser
+	public static class Dialogs
 	{
 		public static async Task ShowDialog(string message)
 		{

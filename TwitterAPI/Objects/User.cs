@@ -5,8 +5,10 @@ namespace Twitter.Objects
 {
 	/// <summary>
 	/// Represents a Twitter user.
-	/// https://dev.twitter.com/overview/api/users
 	/// </summary>
+	/// <remarks>
+	/// https://dev.twitter.com/overview/api/users
+	/// </remarks>
 	[DataContract]
 	public class User
 	{
@@ -175,13 +177,13 @@ namespace Twitter.Objects
 		public string ProfileBackgroundColor { get; set; }
 
 		/// <summary>
-		/// A HTTP-based URL pointing to the background image the user has uploaded for their profile.
+		/// An HTTP-based URL pointing to the background image the user has uploaded for their profile.
 		/// </summary>
 		[DataMember(Name = "profile_background_image_url")]
 		public string ProfileBackgroundImageUrl { get; set; }
 
 		/// <summary>
-		/// A HTTPS-based URL pointing to the background image the user has uploaded for their profile. 
+		/// An HTTPS-based URL pointing to the background image the user has uploaded for their profile. 
 		/// </summary>
 		[DataMember(Name = "profile_background_image_url_https")]
 		public string ProfileBackgroundImageUrlHttps { get; set; }
@@ -203,13 +205,13 @@ namespace Twitter.Objects
 		public string ProfileBannerUrl { get; set; }
 
 		/// <summary>
-		/// A HTTP-based URL pointing to the user's avatar image.
+		/// An HTTP-based URL pointing to the user's avatar image.
 		/// </summary>
 		[DataMember(Name = "profile_image_url")]
 		public string ProfileImageUrl { get; set; }
 
 		/// <summary>
-		/// A HTTPS-based URL pointing to the user's avatar image. 
+		/// An HTTPS-based URL pointing to the user's avatar image. 
 		/// </summary>
 		[DataMember(Name = "profile_image_url_https")]
 		public string ProfileImageUrlHttps { get; set; }

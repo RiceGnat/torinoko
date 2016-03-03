@@ -24,8 +24,6 @@ namespace Torinoko
     /// </summary>
     sealed partial class App : Application
     {
-		private ITwitter twitter;
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -41,7 +39,7 @@ namespace Torinoko
 
 			// Set up Twitter interface
 			TwitterOAuth oAuth = new TwitterOAuth(new TorinokoConsumerKeys());
-			twitter = new TwitterAgent(oAuth);
+			Twitter.API = new TwitterAgent(oAuth);
         }
 
         /// <summary>
@@ -80,8 +78,8 @@ namespace Torinoko
             }
 
 			// Authenticate application and user
-			await twitter.Authenticate();
-			await twitter.GetHomeTimeline();
+			await Twitter.API.Authenticate();
+			await Twitter.API.GetHomeTimeline();
 
             if (rootFrame.Content == null)
             {
