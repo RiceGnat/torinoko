@@ -1,0 +1,66 @@
+﻿<UserControl
+    x:Class="Torinoko.Controls.TweetPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Torinoko.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid Background="White" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="Row1Definition" Height="Auto" />
+            <RowDefinition x:Name="Row2Definition" Height="*" />
+            <RowDefinition x:Name="Row3Definition" Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock x:Name="RetweetMessage" Text="Retweeted by" Margin="5"
+                   Grid.Row="0" Grid.Column="1"/>
+        
+        <Image x:Name="AuthorAvatar" Source="http://placehold.it/64x64" Width="64" Height="64px" Margin="5"
+               Grid.Row="1" Grid.Column="0" />
+        <StackPanel x:Name="TweetBody" Margin="5"
+                   Grid.Row="1" Grid.Column="1">
+            <Grid x:Name="AuthorGroup">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock x:Name="AuthorName" Text="Name" Margin="0,0,10,0"
+                           Grid.Column="0" />
+                <TextBlock x:Name="AuthorHandle" Text="@handle"
+                           Grid.Column="1" />
+                <TextBlock x:Name="Timestamp" Text="2m"
+                           Grid.Column="2" />
+            </Grid>
+            <TextBlock x:Name="TweetText" Text="Tweet contents" TextWrapping="WrapWholeWords" />
+        </StackPanel>
+        
+        <Grid x:Name="ActionGroup" Margin="5"
+                    Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Text="Reply"
+                       Grid.Column="0"/>
+            <TextBlock Text="Retweet"
+                       Grid.Column="1"/>
+            <TextBlock Text="Favorite"
+                       Grid.Column="2"/>
+            <TextBlock Text="More"
+                       Grid.Column="3"/>
+        </Grid>
+    </Grid>
+</UserControl>

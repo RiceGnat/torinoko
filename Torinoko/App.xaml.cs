@@ -79,7 +79,6 @@ namespace Torinoko
 
 			// Authenticate application and user
 			await Twitter.API.Authenticate();
-			await Twitter.API.GetHomeTimeline();
 
             if (rootFrame.Content == null)
             {

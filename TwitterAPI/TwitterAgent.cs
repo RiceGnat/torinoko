@@ -35,7 +35,7 @@ namespace Twitter
 
 
 		private Tweet[] timeline;
-		public IEnumerable<Tweet> Timeline
+		public IEnumerable<Tweet> HomeTimeline
 		{
 			get { return timeline; }
 		}
