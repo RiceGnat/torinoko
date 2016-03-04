@@ -80,6 +80,11 @@ namespace Twitter
 			timeline = ReadJSON<Tweet[]>(response);
 		}
 
+		public async Task GetStream()
+		{
+			await twitterAuth.AuthorizedGetStream("https://userstream.twitter.com/1.1/user.json", String.Empty);
+		}
+
 		public TwitterAgent(ITwitterAuth twitterAuth)
 		{
 			this.twitterAuth = twitterAuth;

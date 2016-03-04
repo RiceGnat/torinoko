@@ -17,7 +17,7 @@ namespace WindowsOAuth
 			await Dialogs.ShowDialog(String.Format("Call to {0} failed. ({1}: {2})", url, (uint)statusCode, statusCode));
 		}
 
-		private static async Task<string> MakeRequest(string url, OAuthParams oAuthParams, string method, string postData = null)
+		private static async Task<HttpResponseMessage> MakeRequest(string url, OAuthParams oAuthParams, string method, string postData = null)
 		{
 			HttpClient http = new HttpClient();
 			HttpRequestMessage request = new HttpRequestMessage();
@@ -27,7 +27,7 @@ namespace WindowsOAuth
 
 			HttpResponseMessage response = await http.SendRequestAsync(request);
 			if (response.IsSuccessStatusCode)
-				return await response.Content.ReadAsStringAsync();
+				return response;
 			else
 			{
 				await ShowErrorDialog(url, response.StatusCode);
@@ -91,6 +91,18 @@ namespace WindowsOAuth
 				await Dialogs.ShowDialog("An error occured during authentication.");
 			}
 
+			return null;
+		}
+
+		public static async Task<string> GetStream(string url, OAuthParams oAuthParams, string queryString = null)
+		{
+			HttpClient http = new HttpClient();
+			HttpRequestMessage request = new HttpRequestMessage();
+			request.Method = new HttpMethod("GET");
+			request.RequestUri = new Uri(url, UriKind.Absolute);
+			request.Headers.Authorization = new HttpCredentialsHeaderValue("OAuth", oAuthParams.GetHeaderString());
+
+			HttpResponseMessage response = await http.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
 			return null;
 		}
 

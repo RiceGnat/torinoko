@@ -11,5 +11,6 @@ namespace Twitter
 
 		Task<bool> Authenticate();
 		Task GetHomeTimeline();
+		Task GetStream();
 	}
 }

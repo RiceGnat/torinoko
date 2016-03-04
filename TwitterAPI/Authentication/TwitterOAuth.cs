@@ -213,6 +213,16 @@ namespace Twitter.Authentication
 			return await RequestUtil.Post(requestUrl, oAuthParams, postData);
 		}
 
+		public async Task<string> AuthorizedGetStream(string requestUrl, string queryString)
+		{
+			OAuthParams oAuthParams = GetNewRequestParams();
+			oAuthParams.Token = AccessToken;
+
+			AddSignature("GET", requestUrl, oAuthParams);
+
+			return await RequestUtil.GetStream(requestUrl, oAuthParams, queryString);
+		}
+
 		/// <summary>
 		/// Creates a new <c>TwitterOAuth</c> instance with the provided consumer key and secret.
 		/// </summary>

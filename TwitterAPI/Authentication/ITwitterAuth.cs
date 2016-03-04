@@ -61,5 +61,8 @@ namespace Twitter.Authentication
 		/// <param name="postData">The data to be included in the request body.</param>
 		/// <returns>The response from the server as a string.</returns>
 		Task<string> AuthorizedPost(string requestUrl, string postData = null);
+
+
+		Task<string> AuthorizedGetStream(string requestUrl, string queryString = null);
 	}
 }

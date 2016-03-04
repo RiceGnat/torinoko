@@ -42,6 +42,8 @@ namespace Torinoko
 			}
 
 			ViewSet.Children.Add(view);
+
+			await Twitter.API.GetStream();
 		}
 	}
 }
