@@ -28,13 +28,27 @@ namespace Torinoko.Controls
 
 		public void SetContent(Tweet tweet)
 		{
-			Row1Definition.Height = new GridLength(0);
+			Tweet displayedTweet = tweet;
 
-			AuthorAvatar.Source = new BitmapImage(new Uri(tweet.User.ProfileImageUrl, UriKind.Absolute));
-			AuthorName.Text = tweet.User.Name;
-			AuthorHandle.Text = "@" + tweet.User.ScreenName;
+			if (tweet.RetweetedStatus != null)
+			{
+				// The tweet is a retweet
+				Row1Definition.Height = new GridLength(0, GridUnitType.Auto);
+				RetweetMessage.Text = "Retweeted by " + tweet.User.Name;
 
-			TweetText.Text = tweet.Text;
+				displayedTweet = tweet.RetweetedStatus;
+			}
+			else
+			{
+				Row1Definition.Height = new GridLength(0, GridUnitType.Pixel);
+				RetweetMessage.Text = String.Empty;
+			}
+
+			AuthorAvatar.Source = new BitmapImage(new Uri(displayedTweet.User.ProfileImageUrl, UriKind.Absolute));
+			AuthorName.Text = displayedTweet.User.Name;
+			AuthorHandle.Text = "@" + displayedTweet.User.ScreenName;
+
+			TweetText.Text = displayedTweet.Text;
 		}
 	}
 }

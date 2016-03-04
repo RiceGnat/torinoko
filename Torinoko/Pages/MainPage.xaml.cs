@@ -31,13 +31,16 @@ namespace Torinoko
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
+			View view = new View();
+			view.Label = "Home";
+
 			await Twitter.API.GetHomeTimeline();
 			foreach (Tweet tweet in Twitter.API.HomeTimeline)
 			{
-				TweetPanel tweetPanel = new TweetPanel();
-				tweetPanel.SetContent(tweet);
-				homeTimeline.Children.Add(tweetPanel);
+				view.AddTweet(tweet);
 			}
+
+			ViewSet.Children.Add(view);
 		}
 	}
 }

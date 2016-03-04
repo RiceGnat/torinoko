@@ -23,16 +23,28 @@ namespace Twitter
 			DateTimeFormat = new DateTimeFormat("ddd MMM dd HH:mm:ss +0000 yyyy")
 		};
 
-		private static Stream GetStreamFromString(string s)
+		private static T ReadJSON<T>(string json)
 		{
 			MemoryStream stream = new MemoryStream();
 			StreamWriter writer = new StreamWriter(stream);
-			writer.Write(s);
+			writer.Write(json);
 			writer.Flush();
 			stream.Position = 0;
-			return stream;
-		}
 
+			T obj = default(T);
+
+			try
+			{
+				DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(Tweet[]), jsonSettings);
+				obj = (T)js.ReadObject(stream);
+			}
+			finally
+			{
+				stream.Dispose();
+			}
+
+			return obj;
+		}
 
 		private Tweet[] timeline;
 		public IEnumerable<Tweet> HomeTimeline
@@ -60,11 +72,7 @@ namespace Twitter
 		{
 			string response = await twitterAuth.AuthorizedGet(homeTimelineUrl, String.Empty);
 
-			DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(Tweet[]), jsonSettings);
-			using (Stream stream = GetStreamFromString(response))
-			{
-				timeline = js.ReadObject(stream) as Tweet[];
-			}
+			timeline = ReadJSON<Tweet[]>(response);
 		}
 
 		public TwitterAgent(ITwitterAuth twitterAuth)
