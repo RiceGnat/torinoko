@@ -22,8 +22,22 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="ViewLabel" Text="Label" Style="{StaticResource View_Label}"
-                   Grid.Row="0" />
+        <Grid x:Name="ViewHeader" Style="{StaticResource View_Header}"
+              Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="ViewLabel" Text="Label" Style="{StaticResource View_Label}"
+                       Grid.Row="1" Grid.Column="0"/>
+            <TextBlock x:Name="ViewUser" Text="@handle" Style="{StaticResource View_User}"
+                       Grid.Row="0" Grid.ColumnSpan="2"/>
+        </Grid>
         <StackPanel x:Name="TweetStack" Orientation="Vertical"
                     Grid.Row="1">
         </StackPanel>

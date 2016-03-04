@@ -32,7 +32,8 @@ namespace Torinoko
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			View view = new View();
-			view.Label = "Home";
+			view.Label = "Home Timeline";
+			view.UserHandle = "@" + Twitter.API.UserHandle;
 
 			await Twitter.API.GetHomeTimeline();
 			foreach (Tweet tweet in Twitter.API.HomeTimeline)

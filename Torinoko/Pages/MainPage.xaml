@@ -8,8 +8,16 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel x:Name="ViewSet">
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="64" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel x:Name="Sidebar" Background="#2f4466"
+                    Grid.Column="0">
+        </StackPanel>
+        <StackPanel x:Name="ViewSet" Orientation="Horizontal" Background="#eeeeee"
+                    Grid.Column="1">
         </StackPanel>
     </Grid>
 </Page>

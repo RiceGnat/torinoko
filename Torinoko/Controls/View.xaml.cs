@@ -31,6 +31,12 @@ namespace Torinoko.Controls
 			set { ViewLabel.Text = value; }
 		}
 
+		public string UserHandle
+		{
+			get { return ViewUser.Text; }
+			set { ViewUser.Text = value; }
+		}
+
 		public void Clear()
 		{
 			TweetStack.Children.Clear();

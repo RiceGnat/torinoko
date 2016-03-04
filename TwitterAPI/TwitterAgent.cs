@@ -46,6 +46,11 @@ namespace Twitter
 			return obj;
 		}
 
+		public string UserHandle
+		{
+			get { return twitterAuth.ScreenName; }
+		}
+
 		private Tweet[] timeline;
 		public IEnumerable<Tweet> HomeTimeline
 		{
