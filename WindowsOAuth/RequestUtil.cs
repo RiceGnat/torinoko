@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
+using Windows.Storage.Streams;
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
 
@@ -17,7 +19,8 @@ namespace WindowsOAuth
 			await Dialogs.ShowDialog(String.Format("Call to {0} failed. ({1}: {2})", url, (uint)statusCode, statusCode));
 		}
 
-		private static async Task<HttpResponseMessage> MakeRequest(string url, OAuthParams oAuthParams, string method, string postData = null)
+
+		private static async Task<HttpResponseMessage> MakeRequest(string url, OAuthParams oAuthParams, string method, string postData = null, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead)
 		{
 			HttpClient http = new HttpClient();
 			HttpRequestMessage request = new HttpRequestMessage();
@@ -25,7 +28,7 @@ namespace WindowsOAuth
 			request.RequestUri = new Uri(url, UriKind.Absolute);
 			request.Headers.Authorization = new HttpCredentialsHeaderValue("OAuth", oAuthParams.GetHeaderString());
 
-			HttpResponseMessage response = await http.SendRequestAsync(request);
+			HttpResponseMessage response = await http.SendRequestAsync(request, option);
 			if (response.IsSuccessStatusCode)
 				return response;
 			else
@@ -49,7 +52,8 @@ namespace WindowsOAuth
 				url = String.Format("{0}?{1}", url, queryString);
 			}
 
-			return await MakeRequest(url, oAuthParams, "GET");
+			HttpResponseMessage response = await MakeRequest(url, oAuthParams, "GET");
+			return await response.Content.ReadAsStringAsync();
 		}
 
 		/// <summary>
@@ -61,7 +65,8 @@ namespace WindowsOAuth
 		/// <returns>The response from the server as a string.</returns>
 		public static async Task<string> Post(string url, OAuthParams oAuthParams, string postData = null)
 		{
-			return await MakeRequest(url, oAuthParams, "POST", postData);
+			HttpResponseMessage response = await MakeRequest(url, oAuthParams, "POST", postData);
+			return await response.Content.ReadAsStringAsync();
 		}
 
 		/// <summary>
@@ -94,16 +99,17 @@ namespace WindowsOAuth
 			return null;
 		}
 
-		public static async Task<string> GetStream(string url, OAuthParams oAuthParams, string queryString = null)
+		/// <summary>
+		/// Sends a GET request asynchronously with the provided OAuth headers and opens a stream for the response.
+		/// </summary>
+		/// <param name="url">The URL to send the request to.</param>
+		/// <param name="oAuthParams">The OAuth parameters that will be included in the request header.</param>
+		/// <param name="queryString">The query string that will be appended to the request URL. Do not include the '?'.</param>
+		/// <returns>The response stream.</returns>
+		public static async Task<IInputStream> GetStream(string url, OAuthParams oAuthParams, string queryString = null)
 		{
-			HttpClient http = new HttpClient();
-			HttpRequestMessage request = new HttpRequestMessage();
-			request.Method = new HttpMethod("GET");
-			request.RequestUri = new Uri(url, UriKind.Absolute);
-			request.Headers.Authorization = new HttpCredentialsHeaderValue("OAuth", oAuthParams.GetHeaderString());
-
-			HttpResponseMessage response = await http.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead);
-			return null;
+			HttpResponseMessage response = await MakeRequest(url, oAuthParams, "GET", null, HttpCompletionOption.ResponseHeadersRead);
+			return await response.Content.ReadAsInputStreamAsync();
 		}
 
 		/// <summary>

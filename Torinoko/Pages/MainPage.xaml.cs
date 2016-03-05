@@ -35,15 +35,16 @@ namespace Torinoko
 			view.Label = "Home Timeline";
 			view.UserHandle = "@" + Twitter.API.UserHandle;
 
-			await Twitter.API.GetHomeTimeline();
-			foreach (Tweet tweet in Twitter.API.HomeTimeline)
+			IEnumerable<Tweet> timeline = await Twitter.API.GetHomeTimeline();
+			foreach (Tweet tweet in timeline)
 			{
 				view.AddTweet(tweet);
 			}
 
 			ViewSet.Children.Add(view);
 
-			await Twitter.API.GetStream();
+			var stream = await Twitter.API.GetUserStream();
+			stream.StartTask();
 		}
 	}
 }

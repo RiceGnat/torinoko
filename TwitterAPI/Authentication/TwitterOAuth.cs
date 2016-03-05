@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using WindowsOAuth;
 
 namespace Twitter.Authentication
@@ -12,9 +10,6 @@ namespace Twitter.Authentication
 	/// </summary>
 	public class TwitterOAuth : ITwitterAuth
 	{
-		private const string requestTokenUrl = "https://api.twitter.com/oauth/request_token";
-		private const string authenticateUrl = "https://api.twitter.com/oauth/authenticate";
-		private const string accessTokenUrl = "https://api.twitter.com/oauth/access_token";
 		private const string callbackUrl = "test://callback";
 
 		private ITwitterConsumerKeyStore keys;
@@ -110,9 +105,9 @@ namespace Twitter.Authentication
 			OAuthParams oAuthParams = GetNewRequestParams();
 			oAuthParams.Callback = Uri.EscapeDataString(callbackUrl);
 
-			AddSignature("POST", requestTokenUrl, oAuthParams);
+			AddSignature("POST", TwitterOAuthEndpoints.PostRequestToken, oAuthParams);
 
-			string response = await RequestUtil.Post(requestTokenUrl, oAuthParams);
+			string response = await RequestUtil.Post(TwitterOAuthEndpoints.PostRequestToken, oAuthParams);
 
 			if (String.IsNullOrEmpty(response))
 				throw new Exception("Failed getting request token.");
@@ -134,7 +129,7 @@ namespace Twitter.Authentication
 		{
 			OAuthParams oAuthParams = new OAuthParams{ Token = RequestToken };
 
-			string response = await RequestUtil.WebAuthenticate(authenticateUrl, callbackUrl, oAuthParams);
+			string response = await RequestUtil.WebAuthenticate(TwitterOAuthEndpoints.GetAuthenticate, callbackUrl, oAuthParams);
 
 			if (String.IsNullOrEmpty(response))
 				throw new Exception("Failed to authenticate user.");
@@ -160,9 +155,9 @@ namespace Twitter.Authentication
 			oAuthParams.Token = RequestToken;
 			oAuthParams.Verifier = Verifier;
 
-			AddSignature("POST", accessTokenUrl, oAuthParams);
+			AddSignature("POST", TwitterOAuthEndpoints.PostAccessToken, oAuthParams);
 
-			string response = await RequestUtil.Post(accessTokenUrl, oAuthParams);
+			string response = await RequestUtil.Post(TwitterOAuthEndpoints.PostAccessToken, oAuthParams);
 
 			if (String.IsNullOrEmpty(response))
 				throw new Exception("Failed getting access token.");
@@ -213,7 +208,13 @@ namespace Twitter.Authentication
 			return await RequestUtil.Post(requestUrl, oAuthParams, postData);
 		}
 
-		public async Task<string> AuthorizedGetStream(string requestUrl, string queryString)
+		/// <summary>
+		/// Opens a GET stream using the OAuth access token.
+		/// </summary>
+		/// <param name="requestUrl">The URL to send the request to.</param>
+		/// <param name="queryString">The query string to be appended to the request URL. Do not include the '?'.</param>
+		/// <returns>The response stream.</returns>
+		public async Task<IInputStream> AuthorizedGetStream(string requestUrl, string queryString)
 		{
 			OAuthParams oAuthParams = GetNewRequestParams();
 			oAuthParams.Token = AccessToken;

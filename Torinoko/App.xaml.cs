@@ -38,8 +38,7 @@ namespace Torinoko
             this.Suspending += OnSuspending;
 
 			// Set up Twitter interface
-			TwitterOAuth oAuth = new TwitterOAuth(new TorinokoConsumerKeys());
-			Twitter.API = new TwitterAgent(oAuth);
+			Twitter.API = new TwitterAgent(new TorinokoConsumerKeys());
         }
 
         /// <summary>
@@ -78,7 +77,12 @@ namespace Torinoko
             }
 
 			// Authenticate application and user
-			await Twitter.API.Authenticate();
+			bool authenticated = await Twitter.API.Authenticate();
+
+			if (!authenticated)
+			{
+				Window.Current.Close();
+			}
 
             if (rootFrame.Content == null)
             {

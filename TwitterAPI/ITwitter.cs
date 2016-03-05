@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using Twitter.Objects;
+using Twitter.Streams;
 
 namespace Twitter
 {
 	public interface ITwitter
 	{
 		string UserHandle { get; }
-		IEnumerable<Tweet> HomeTimeline { get; }
 
 		Task<bool> Authenticate();
-		Task GetHomeTimeline();
-		Task GetStream();
+		Task<IEnumerable<Tweet>> GetHomeTimeline();
+		Task<User> GetUser();
+		Task<User> GetUser(string userId, string screenName);
+		Task<TwitterStream> GetUserStream();
 	}
 }

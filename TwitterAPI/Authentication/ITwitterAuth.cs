@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Windows.Storage.Streams;
 
 namespace Twitter.Authentication
 {
@@ -63,6 +60,6 @@ namespace Twitter.Authentication
 		Task<string> AuthorizedPost(string requestUrl, string postData = null);
 
 
-		Task<string> AuthorizedGetStream(string requestUrl, string queryString = null);
+		Task<IInputStream> AuthorizedGetStream(string requestUrl, string queryString = null);
 	}
 }

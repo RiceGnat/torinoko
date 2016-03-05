@@ -6,17 +6,18 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using WindowsOAuth;
 using Twitter.Authentication;
 using Twitter.Objects;
+using Twitter.Streams;
 
 namespace Twitter
 {
 	public class TwitterAgent : ITwitter
 	{
-		private ITwitterAuth twitterAuth;
-
-		private const string homeTimelineUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json";
+		private ITwitterConsumerKeyStore keys;
+		private ITwitterAuth auth;
 
 		private static readonly DataContractJsonSerializerSettings jsonSettings = new DataContractJsonSerializerSettings
 		{
@@ -48,46 +49,49 @@ namespace Twitter
 
 		public string UserHandle
 		{
-			get { return twitterAuth.ScreenName; }
-		}
-
-		private Tweet[] timeline;
-		public IEnumerable<Tweet> HomeTimeline
-		{
-			get { return timeline; }
+			get { return auth.ScreenName; }
 		}
 
 		public async Task<bool> Authenticate()
 		{
 			try
 			{
-				await twitterAuth.GetRequestToken();
-				await twitterAuth.AuthenticateUser();
-				await twitterAuth.GetAccessToken();
+				await auth.GetRequestToken();
+				await auth.AuthenticateUser();
+				await auth.GetAccessToken();
 				return true;
 			}
 			catch (Exception ex)
 			{
-				await Dialogs.ShowDialog("An error has occurred\n" + ex.Message);
+				await Dialogs.ShowDialog("An error has occurred.\n" + ex.Message);
 				return false;
 			}
 		}
 
-		public async Task GetHomeTimeline()
-		{
-			string response = await twitterAuth.AuthorizedGet(homeTimelineUrl, String.Empty);
+		public async Task<User> GetUser() => await GetUser(auth.UserId, auth.ScreenName);
 
-			timeline = ReadJSON<Tweet[]>(response);
+		public async Task<User> GetUser(string userId, string screenName)
+		{
+			string response = await auth.AuthorizedGet(TwitterEndpoints.GetUsersShow);
+			return ReadJSON<User>(response);
 		}
 
-		public async Task GetStream()
+		public async Task<IEnumerable<Tweet>> GetHomeTimeline()
 		{
-			await twitterAuth.AuthorizedGetStream("https://userstream.twitter.com/1.1/user.json", String.Empty);
+			string response = await auth.AuthorizedGet(TwitterEndpoints.GetStatusesHomeTimeline);
+			return ReadJSON<Tweet[]>(response);
 		}
 
-		public TwitterAgent(ITwitterAuth twitterAuth)
+		public async Task<TwitterStream> GetUserStream()
 		{
-			this.twitterAuth = twitterAuth;
+			IInputStream stream = await auth.AuthorizedGetStream(TwitterEndpoints.GetUserStream);
+			return new TwitterStream(stream);
+		}
+
+		public TwitterAgent(ITwitterConsumerKeyStore keys)
+		{
+			this.keys = keys;
+			auth = new TwitterOAuth(keys);
 		}
 	}
 }
