@@ -31,8 +31,8 @@ namespace Torinoko
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
-			View view = new View();
-			view.Label = "Home Timeline";
+			ViewColumn view = new ViewColumn();
+			view.Label = "Home";
 			view.UserHandle = "@" + Twitter.API.UserHandle;
 
 			IEnumerable<Tweet> timeline = await Twitter.API.GetHomeTimeline();
@@ -42,6 +42,18 @@ namespace Torinoko
 			}
 
 			ViewSet.Children.Add(view);
+
+			ViewColumn mentions = new ViewColumn();
+			mentions.Label = "Mentions";
+			mentions.UserHandle = "@" + Twitter.API.UserHandle;
+
+			timeline = await Twitter.API.GetMentions();
+			foreach (Tweet tweet in timeline)
+			{
+				mentions.AddTweet(tweet);
+			}
+
+			ViewSet.Children.Add(mentions);
 
 			var stream = await Twitter.API.GetUserStream();
 			stream.StartTask();

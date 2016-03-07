@@ -12,6 +12,7 @@ namespace Twitter
 
 		Task<bool> Authenticate();
 		Task<IEnumerable<Tweet>> GetHomeTimeline();
+		Task<IEnumerable<Tweet>> GetMentions();
 		Task<User> GetUser();
 		Task<User> GetUser(string userId, string screenName);
 		Task<TwitterStream> GetUserStream();

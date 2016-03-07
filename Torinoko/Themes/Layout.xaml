@@ -4,8 +4,6 @@
     xmlns:local="using:Torinoko.Controls">
 
     <Style x:Key="View_Container" TargetType="Grid">
-        <Setter Property="Background" Value="#eeeeee" />
-        <Setter Property="BorderBrush" Value="LightGray" />
         <Setter Property="BorderThickness" Value="1,0,1,0" />
         <Setter Property="Width" Value="400" />
     </Style>
@@ -14,27 +12,21 @@
     <Style x:Key="View_Label" TargetType="TextBlock">
         <Setter Property="Margin" Value="10,0,10,5" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Foreground" Value="#2f4466" />
-        <Setter Property="FontWeight" Value="Light" />
         <Setter Property="FontSize" Value="28" />
     </Style>
     <Style x:Key="View_User" TargetType="TextBlock">
         <Setter Property="Margin" Value="10,10,10,0" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Foreground" Value="#959daa" />
         <Setter Property="FontSize" Value="14" />
     </Style>
     
     <Style x:Key="TweetPanel_Container" TargetType="Grid">
-        <Setter Property="Background" Value="White" />
-        <Setter Property="BorderBrush" Value="LightGray" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
     <Style x:Key="TweetPanel_RetweetMessage" TargetType="TextBlock">
         <Setter Property="Margin" Value="10,10,10,0" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Foreground" Value="#959daa" />
         <Setter Property="FontSize" Value="12" />
     </Style>
     <Style x:Key="TweetPanel_AuthorAvatar" TargetType="Image">
@@ -50,30 +42,24 @@
     <Style x:Key="TweetPanel_AuthorName" TargetType="TextBlock">
         <Setter Property="Margin" Value="0,0,10,0" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Foreground" Value="#2f4466" />
-        <Setter Property="FontWeight" Value="Medium" />
         <Setter Property="FontSize" Value="14" />
     </Style>
     <Style x:Key="TweetPanel_AuthorHandle" TargetType="TextBlock">
         <Setter Property="Margin" Value="0,0,0,1" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Foreground" Value="#959daa" />
         <Setter Property="FontSize" Value="12" />
     </Style>
     <Style x:Key="TweetPanel_Timestamp" TargetType="TextBlock">
         <Setter Property="Margin" Value="0,0,0,1" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Foreground" Value="#959daa" />
         <Setter Property="FontSize" Value="12" />
     </Style>
     <Style x:Key="TweetPanel_Text" TargetType="TextBlock">
         <Setter Property="TextWrapping" Value="WrapWholeWords" />
-        <Setter Property="Foreground" Value="#444444" />
         <Setter Property="FontSize" Value="14" />
     </Style>
     <Style x:Key="TweetPanel_ActionIcon" TargetType="TextBlock">
         <Setter Property="TextAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="#959daa" />
         <Setter Property="FontSize" Value="12" />
     </Style>
 </ResourceDictionary>

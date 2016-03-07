@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Torinoko.Controls.View"
+    x:Class="Torinoko.Controls.ViewColumn"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Torinoko.Controls"
@@ -10,19 +10,21 @@
     d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/Layout.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default" Source="/Themes/Light.xaml" />
+            </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Style="{StaticResource View_Container}">
+    <Grid Width="400" BorderThickness="1,0,1,0"
+          Background="{ThemeResource MainBackgroundColor}"
+          BorderBrush="{ThemeResource BorderColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid x:Name="ViewHeader" Style="{StaticResource View_Header}"
+        <Grid x:Name="ViewHeader"
               Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -33,10 +35,16 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="ViewLabel" Text="Label" Style="{StaticResource View_Label}"
-                       Grid.Row="1" Grid.Column="0"/>
-            <TextBlock x:Name="ViewUser" Text="@handle" Style="{StaticResource View_User}"
+            <TextBlock x:Name="ViewUser" Text="@handle"
+                       Margin="10,10,10,0" VerticalAlignment="Bottom"
+                       FontSize="14"
+                       Style="{ThemeResource ViewUser}"
                        Grid.Row="0" Grid.ColumnSpan="2"/>
+            <TextBlock x:Name="ViewLabel" Text="Label"
+                       Margin="10,0,10,5" VerticalAlignment="Bottom"
+                       FontSize="28"
+                       Style="{ThemeResource ViewLabel}"
+                       Grid.Row="1" Grid.Column="0"/>
         </Grid>
         <StackPanel x:Name="TweetStack" Orientation="Vertical"
                     Grid.Row="1">

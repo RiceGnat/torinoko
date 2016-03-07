@@ -82,6 +82,12 @@ namespace Twitter
 			return ReadJSON<Tweet[]>(response);
 		}
 
+		public async Task<IEnumerable<Tweet>> GetMentions()
+		{
+			string response = await auth.AuthorizedGet(TwitterEndpoints.GetStatusesMentionsTimeline);
+			return ReadJSON<Tweet[]>(response);
+		}
+
 		public async Task<TwitterStream> GetUserStream()
 		{
 			IInputStream stream = await auth.AuthorizedGetStream(TwitterEndpoints.GetUserStream);
