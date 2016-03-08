@@ -19,7 +19,6 @@ namespace WindowsOAuth
 			await Dialogs.ShowDialog(String.Format("Call to {0} failed. ({1}: {2})", url, (uint)statusCode, statusCode));
 		}
 
-
 		private static async Task<HttpResponseMessage> MakeRequest(string url, OAuthParams oAuthParams, string method, string postData = null, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead)
 		{
 			HttpClient http = new HttpClient();

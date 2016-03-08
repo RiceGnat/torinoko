@@ -31,16 +31,16 @@ namespace Torinoko.Controls
 			Tweet displayedTweet = tweet;
 
 			if (tweet.RetweetedStatus != null)
-			{
-				// The tweet is a retweet
-				Row1Definition.Height = new GridLength(0, GridUnitType.Auto);
-				RetweetMessage.Text = "Retweeted by " + tweet.User.Name;
+			{	// Retweet
+				RetweetRowDefinition.Height = new GridLength(0, GridUnitType.Auto);
+				RetweetMessage.Text = "Retweeted by";
+				RetweetUser.Text = " " + tweet.User.Name;
 
 				displayedTweet = tweet.RetweetedStatus;
 			}
 			else
-			{
-				Row1Definition.Height = new GridLength(0, GridUnitType.Pixel);
+			{	// Normal tweet
+				RetweetRowDefinition.Height = new GridLength(0, GridUnitType.Pixel);
 				RetweetMessage.Text = String.Empty;
 			}
 

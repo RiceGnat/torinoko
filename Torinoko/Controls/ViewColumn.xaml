@@ -11,14 +11,30 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Default" Source="/Themes/Light.xaml" />
+                <ResourceDictionary x:Key="Light" Source="/Styles/Themes/Light.xaml" />
             </ResourceDictionary.ThemeDictionaries>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Text.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="Container" TargetType="Grid">
+                <Setter Property="BorderThickness" Value="1,0,1,0" />
+                <Setter Property="Width" Value="400" />
+                <Setter Property="Background" Value="{ThemeResource MainBackgroundColor}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource BorderColor}" />
+            </Style>
+            <Style x:Key="ViewUser" TargetType="TextBlock" BasedOn="{StaticResource Sub1}">
+                <Setter Property="Margin" Value="10,10,10,0" />
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+            </Style>
+            <Style x:Key="ViewLabel" TargetType="TextBlock" BasedOn="{StaticResource Header1}">
+                <Setter Property="Margin" Value="10,0,10,5" />
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Width="400" BorderThickness="1,0,1,0"
-          Background="{ThemeResource MainBackgroundColor}"
-          BorderBrush="{ThemeResource BorderColor}">
+    <Grid Style="{StaticResource Container}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -35,15 +51,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="ViewUser" Text="@handle"
-                       Margin="10,10,10,0" VerticalAlignment="Bottom"
-                       FontSize="14"
-                       Style="{ThemeResource ViewUser}"
+            <TextBlock x:Name="ViewUser" Text="@handle" Style="{StaticResource ViewUser}"
                        Grid.Row="0" Grid.ColumnSpan="2"/>
-            <TextBlock x:Name="ViewLabel" Text="Label"
-                       Margin="10,0,10,5" VerticalAlignment="Bottom"
-                       FontSize="28"
-                       Style="{ThemeResource ViewLabel}"
+            <TextBlock x:Name="ViewLabel" Text="Label" Style="{StaticResource ViewLabel}"
                        Grid.Row="1" Grid.Column="0"/>
         </Grid>
         <StackPanel x:Name="TweetStack" Orientation="Vertical"

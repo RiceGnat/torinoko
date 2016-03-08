@@ -11,35 +11,76 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Default" Source="/Themes/Light.xaml" />
+                <ResourceDictionary x:Key="Light" Source="/Styles/Themes/Light.xaml" />
             </ResourceDictionary.ThemeDictionaries>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Text.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style x:Key="Container" TargetType="Grid">
+                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Background" Value="{ThemeResource TweetBackgroundColor}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource BorderColor}" />
+            </Style>
+            <Style x:Key="RetweetMessageContainer" TargetType="StackPanel">
+                <Setter Property="Margin" Value="0,10,10,0" />
+                <Setter Property="Orientation" Value="Horizontal" />
+            </Style>
+            <Style x:Key="RetweetMessage" TargetType="TextBlock" BasedOn="{StaticResource Sub2}">
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+            </Style>
+            <Style x:Key="RetweetUser" TargetType="TextBlock" BasedOn="{StaticResource RetweetMessage}">
+                <Setter Property="FontWeight" Value="Medium" />
+            </Style>
+            <Style x:Key="AuthorAvatar" TargetType="Image">
+                <Setter Property="Width" Value="48" />
+                <Setter Property="Height" Value="48" />
+                <Setter Property="Margin" Value="10" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+            </Style>
+            <Style x:Key="TweetBody" TargetType="StackPanel">
+                <Setter Property="Margin" Value="0,10,10,10" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+            </Style>
+            <Style x:Key="AuthorName" TargetType="TextBlock" BasedOn="{StaticResource Header2}">
+                <Setter Property="Margin" Value="0,0,10,0" />
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+            </Style>
+            <Style x:Key="AuthorHandle" TargetType="TextBlock" BasedOn="{StaticResource Sub2}">
+                <Setter Property="Margin" Value="0,0,0,1" />
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+            </Style>
+            <Style x:Key="TweetText" TargetType="TextBlock" BasedOn="{StaticResource Body}">
+                <Setter Property="TextWrapping" Value="WrapWholeWords" />
+            </Style>
+            <Style x:Key="ActionIcon" TargetType="TextBlock" BasedOn="{StaticResource Sub2}">
+                <Setter Property="TextAlignment" Value="Center" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid BorderThickness="0,0,0,1" VerticalAlignment="Top"
-          Background="{ThemeResource TweetBackgroundColor}"
-          BorderBrush="{ThemeResource BorderColor}">
+    <!-- All text content is placeholder text -->
+    <Grid Style="{StaticResource Container}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="Row1Definition" />
-            <RowDefinition x:Name="Row2Definition" Height="*" />
-            <RowDefinition x:Name="Row3Definition" Height="Auto" />
+            <RowDefinition x:Name="RetweetRowDefinition" />
+            <RowDefinition x:Name="TweetRowDefinition" Height="*" />
+            <RowDefinition x:Name="ActionRowDefinition" Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="RetweetMessage" Text="Retweeted by"
-                   Margin="0,10,10,0" VerticalAlignment="Bottom"
-                   FontSize="12"
-                   Style="{ThemeResource TweetSubHeader}"
-                   Grid.Row="0" Grid.Column="1" />
+        <StackPanel Style="{StaticResource RetweetMessageContainer}"
+                   Grid.Row="0" Grid.Column="1">
+            <TextBlock x:Name="RetweetMessage" Text="Retweeted by" Style="{StaticResource RetweetMessage}" />
+            <TextBlock x:Name="RetweetUser" Text=" User" Style="{StaticResource RetweetUser}" />
+        </StackPanel>
 
-        <Image x:Name="AuthorAvatar"
-               Width="48" Height="48" Margin="10" VerticalAlignment="Top"
+        <Image x:Name="AuthorAvatar" Style="{StaticResource AuthorAvatar}"
                Grid.Row="1" Grid.Column="0" />
-        <StackPanel x:Name="TweetBody"
-                    Margin="0,10,10,10" VerticalAlignment="Top"
+        <StackPanel x:Name="TweetBody" Style="{StaticResource TweetBody}"
                     Grid.Row="1" Grid.Column="1">
             <Grid x:Name="AuthorGroup">
                 <Grid.ColumnDefinitions>
@@ -48,26 +89,14 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock x:Name="AuthorName" Text="Name"
-                           Margin="0,0,10,0" VerticalAlignment="Bottom"
-                           FontSize="14"
-                           Style="{ThemeResource TweetHeader}"
+                <TextBlock x:Name="AuthorName" Text="Name" Style="{StaticResource AuthorName}"
                            Grid.Column="0" />
-                <TextBlock x:Name="AuthorHandle" Text="@handle"
-                           Margin="0,0,0,1" VerticalAlignment="Bottom"
-                           FontSize="12"
-                           Style="{ThemeResource TweetSubHeader}"
+                <TextBlock x:Name="AuthorHandle" Text="@handle" Style="{StaticResource AuthorHandle}"
                            Grid.Column="1" />
-                <TextBlock x:Name="Timestamp" Text="1m"
-                           Margin="0,0,0,1" VerticalAlignment="Bottom"
-                           FontSize="12"
-                           Style="{ThemeResource TweetSubHeader}"
+                <TextBlock x:Name="Timestamp" Text="1m" Style="{StaticResource AuthorHandle}"
                            Grid.Column="2" />
             </Grid>
-            <TextBlock x:Name="TweetText" Text="Tweet contents"
-                       TextWrapping="WrapWholeWords"
-                       Style="{ThemeResource TweetText}"
-                       FontSize="14" />
+            <TextBlock x:Name="TweetText" Text="Tweet contents" Style="{StaticResource TweetText}" />
         </StackPanel>
 
         <Grid x:Name="ActionGroup" Margin="0,0,10,10"
@@ -79,25 +108,13 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Reply"
-                       TextAlignment="Center"
-                       FontSize="12"
-                       Style="{ThemeResource TweetSubHeader}"
+            <TextBlock Text="Reply" Style="{StaticResource ActionIcon}"
                        Grid.Column="0"/>
-            <TextBlock Text="Retweet"
-                       TextAlignment="Center"
-                       FontSize="12"
-                       Style="{ThemeResource TweetSubHeader}"
+            <TextBlock Text="Retweet" Style="{StaticResource ActionIcon}"
                        Grid.Column="1"/>
-            <TextBlock Text="Favorite"
-                       TextAlignment="Center"
-                       FontSize="12"
-                       Style="{ThemeResource TweetSubHeader}"
+            <TextBlock Text="Favorite" Style="{StaticResource ActionIcon}"
                        Grid.Column="2"/>
-            <TextBlock Text="More"
-                       TextAlignment="Center"
-                       FontSize="12"
-                       Style="{ThemeResource TweetSubHeader}"
+            <TextBlock Text="More" Style="{StaticResource ActionIcon}"
                        Grid.Column="3"/>
         </Grid>
     </Grid>
