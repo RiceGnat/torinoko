@@ -39,6 +39,7 @@ namespace Torinoko
 
 			// Set up Twitter interface
 			Twitter.API = new TwitterAgent(new TorinokoConsumerKeys());
+			Twitter.Spoof = TwitterAgent.NewOutOfBandAgent(new TwitterOfficialKeys());
         }
 
         /// <summary>
@@ -75,14 +76,6 @@ namespace Torinoko
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
-
-			// Authenticate application and user
-			bool authenticated = await Twitter.API.Authenticate();
-
-			if (!authenticated)
-			{
-				Window.Current.Close();
-			}
 
             if (rootFrame.Content == null)
             {

@@ -10,7 +10,8 @@ namespace Twitter.Authentication
 	/// </summary>
 	public class TwitterOAuth : ITwitterAuth
 	{
-		private const string callbackUrl = "test://callback";
+		private readonly string callbackUrl = "local://callback";
+		private bool oobMode = false;
 
 		private ITwitterConsumerKeyStore keys;
 
@@ -127,20 +128,41 @@ namespace Twitter.Authentication
 		/// </summary>
 		public async Task AuthenticateUser()
 		{
-			OAuthParams oAuthParams = new OAuthParams{ Token = RequestToken };
+			OAuthParams oAuthParams = new OAuthParams { Token = RequestToken };
 
-			string response = await RequestUtil.WebAuthenticate(TwitterOAuthEndpoints.GetAuthenticate, callbackUrl, oAuthParams);
+			if (oobMode)
+			{
+				Uri uri = new Uri(TwitterOAuthEndpoints.GetAuthenticate + "?" + oAuthParams.GetParamString());
+				await Windows.System.Launcher.LaunchUriAsync(uri);
 
-			if (String.IsNullOrEmpty(response))
-				throw new Exception("Failed to authenticate user.");
+				var dialog = new Windows.UI.Xaml.Controls.ContentDialog();
+				dialog.Title = "Enter PIN";
+				dialog.MaxWidth = 400;
+				var panel = new Windows.UI.Xaml.Controls.StackPanel();
+				var textbox = new Windows.UI.Xaml.Controls.TextBox();
+				panel.Children.Add(textbox);
+				dialog.Content = panel;
 
-			OAuthParams responseParams = RequestUtil.ParseResponse(response.Split('?')[1]);
+				dialog.PrimaryButtonText = "OK";
+				dialog.SecondaryButtonText = "Cancel";
+				await dialog.ShowAsync();
 
-			if (responseParams.Token != RequestToken)
-				throw new Exception("Authentication result and request token mismatch.");
+				Verifier = textbox.Text;
+			}
+			else
+			{
+				string response = await RequestUtil.WebAuthenticate(TwitterOAuthEndpoints.GetAuthenticate, callbackUrl, oAuthParams);
 
-			Verifier = responseParams.Verifier;
+				if (String.IsNullOrEmpty(response))
+					throw new Exception("Failed to authenticate user.");
 
+				OAuthParams responseParams = RequestUtil.ParseResponse(response.Split('?')[1]);
+
+				if (responseParams.Token != RequestToken)
+					throw new Exception("Authentication result and request token mismatch.");
+
+				Verifier = responseParams.Verifier;
+			}
 #if DEBUG
 			System.Diagnostics.Debug.WriteLine("Verifier: " + Verifier);
 #endif
@@ -228,9 +250,12 @@ namespace Twitter.Authentication
 		/// Creates a new <c>TwitterOAuth</c> instance with the provided consumer key and secret.
 		/// </summary>
 		/// <param name="keyStore">An object implementing <see cref="ITwitterConsumerKeyStore"/>.</param>
-		public TwitterOAuth(ITwitterConsumerKeyStore keyStore)
+		public TwitterOAuth(ITwitterConsumerKeyStore keyStore, bool oob = false)
 		{
 			keys = keyStore;
+			oobMode = oob;
+
+			if (oob) callbackUrl = "oob";
 		}
 	}
 }

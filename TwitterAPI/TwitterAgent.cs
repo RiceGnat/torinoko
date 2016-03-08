@@ -88,16 +88,31 @@ namespace Twitter
 			return ReadJSON<Tweet[]>(response);
 		}
 
+		public async Task GetActivity()
+		{
+			string response = await auth.AuthorizedGet(TwitterEndpoints.GetActivityAboutMe);
+		}
+
 		public async Task<TwitterStream> GetUserStream()
 		{
 			IInputStream stream = await auth.AuthorizedGetStream(TwitterEndpoints.GetUserStream);
 			return new TwitterStream(stream);
 		}
 
+		private TwitterAgent() { }
+
 		public TwitterAgent(ITwitterConsumerKeyStore keys)
 		{
 			this.keys = keys;
 			auth = new TwitterOAuth(keys);
+		}
+
+		public static TwitterAgent NewOutOfBandAgent(ITwitterConsumerKeyStore keys)
+		{
+			TwitterAgent agent = new TwitterAgent();
+			agent.keys = keys;
+			agent.auth = new TwitterOAuth(keys, true);
+			return agent;
 		}
 	}
 }

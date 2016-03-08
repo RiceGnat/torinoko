@@ -10,5 +10,6 @@ namespace Torinoko
 	static class Twitter
 	{
 		public static ITwitter API { get; set; }
+		public static ITwitter Spoof { get; set; }
 	}
 }

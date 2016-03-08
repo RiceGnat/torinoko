@@ -52,7 +52,7 @@ namespace WindowsOAuth
 			}
 
 			HttpResponseMessage response = await MakeRequest(url, oAuthParams, "GET");
-			return await response.Content.ReadAsStringAsync();
+			return await response?.Content.ReadAsStringAsync();
 		}
 
 		/// <summary>
@@ -65,7 +65,7 @@ namespace WindowsOAuth
 		public static async Task<string> Post(string url, OAuthParams oAuthParams, string postData = null)
 		{
 			HttpResponseMessage response = await MakeRequest(url, oAuthParams, "POST", postData);
-			return await response.Content.ReadAsStringAsync();
+			return await response?.Content.ReadAsStringAsync();
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace WindowsOAuth
 		public static async Task<IInputStream> GetStream(string url, OAuthParams oAuthParams, string queryString = null)
 		{
 			HttpResponseMessage response = await MakeRequest(url, oAuthParams, "GET", null, HttpCompletionOption.ResponseHeadersRead);
-			return await response.Content.ReadAsInputStreamAsync();
+			return await response?.Content.ReadAsInputStreamAsync();
 		}
 
 		/// <summary>

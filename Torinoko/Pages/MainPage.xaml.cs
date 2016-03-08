@@ -31,6 +31,15 @@ namespace Torinoko
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
+			// Authenticate application and user
+			bool authenticated = await Twitter.API.Authenticate();
+			bool authenticated2 = await Twitter.Spoof.Authenticate();
+
+			if (!authenticated)
+			{
+				Window.Current.Close();
+			}
+
 			ViewColumn view = new ViewColumn();
 			view.Label = "Home";
 			view.UserHandle = "@" + Twitter.API.UserHandle;
@@ -57,6 +66,9 @@ namespace Torinoko
 
 			var stream = await Twitter.API.GetUserStream();
 			stream.StartTask();
+
+			//await Twitter.API.GetActivity();
+			await Twitter.Spoof.GetActivity();
 		}
 	}
 }

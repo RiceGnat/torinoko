@@ -12,5 +12,6 @@ namespace Twitter
 		public const string GetStatusesMentionsTimeline = "https://api.twitter.com/1.1/statuses/mentions_timeline.json";
 		public const string GetUsersShow = "https://api.twitter.com/1.1/users/show.json";
 		public const string GetUserStream = "https://userstream.twitter.com/1.1/user.json";
+		public const string GetActivityAboutMe = "https://api.twitter.com/i/activity/about_me.json";
 	}
 }

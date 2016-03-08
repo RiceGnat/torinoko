@@ -11,10 +11,11 @@ namespace Twitter
 		string UserHandle { get; }
 
 		Task<bool> Authenticate();
-		Task<IEnumerable<Tweet>> GetHomeTimeline();
-		Task<IEnumerable<Tweet>> GetMentions();
 		Task<User> GetUser();
 		Task<User> GetUser(string userId, string screenName);
+		Task<IEnumerable<Tweet>> GetHomeTimeline();
+		Task<IEnumerable<Tweet>> GetMentions();
 		Task<TwitterStream> GetUserStream();
+		Task GetActivity();
 	}
 }
