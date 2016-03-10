@@ -32,8 +32,8 @@ namespace Torinoko
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			// Authenticate application and user
-			bool authenticated = await Twitter.API.Authenticate();
-			bool authenticated2 = await Twitter.Spoof.Authenticate();
+			bool authenticated = await Twitter.DefaultAgent.Authenticate();
+			//bool authenticated2 = await Twitter.Spoof.Authenticate();
 
 			if (!authenticated)
 			{
@@ -42,9 +42,9 @@ namespace Torinoko
 
 			ViewColumn view = new ViewColumn();
 			view.Label = "Home";
-			view.UserHandle = "@" + Twitter.API.UserHandle;
+			view.UserHandle = "@" + Twitter.DefaultAgent.UserHandle;
 
-			IEnumerable<Tweet> timeline = await Twitter.API.GetHomeTimeline();
+			IEnumerable<Tweet> timeline = await Twitter.DefaultAgent.GetHomeTimeline();
 			foreach (Tweet tweet in timeline)
 			{
 				view.AddTweet(tweet);
@@ -54,9 +54,9 @@ namespace Torinoko
 
 			ViewColumn mentions = new ViewColumn();
 			mentions.Label = "Mentions";
-			mentions.UserHandle = "@" + Twitter.API.UserHandle;
+			mentions.UserHandle = "@" + Twitter.DefaultAgent.UserHandle;
 
-			timeline = await Twitter.API.GetMentions();
+			timeline = await Twitter.DefaultAgent.GetMentions();
 			foreach (Tweet tweet in timeline)
 			{
 				mentions.AddTweet(tweet);
@@ -64,11 +64,20 @@ namespace Torinoko
 
 			ViewSet.Children.Add(mentions);
 
-			var stream = await Twitter.API.GetUserStream();
-			stream.StartTask();
-
-			//await Twitter.API.GetActivity();
-			await Twitter.Spoof.GetActivity();
+			await Twitter.DefaultAgent.OpenUserStream();
+			Twitter.DefaultAgent.UserStream.MessageReceived += (message) =>
+			{
+				if (message.UserMessage.Friends != null)
+				{
+					System.Diagnostics.Debug.WriteLine($"Preamble received. {message.UserMessage.Friends.Length} friend IDs.");
+				}
+				else
+				{
+					System.Diagnostics.Debug.WriteLine(message.UserMessage.EventName);
+				}
+			};
+			//await Twitter.DefaultAgent.GetActivity();
+			//await Twitter.Spoof.GetActivity();
 		}
 	}
 }

@@ -38,7 +38,7 @@ namespace Torinoko
             this.Suspending += OnSuspending;
 
 			// Set up Twitter interface
-			Twitter.API = new TwitterAgent(new TorinokoConsumerKeys());
+			Twitter.DefaultAgent = new TwitterAgent(new TorinokoConsumerKeys());
 			Twitter.Spoof = TwitterAgent.NewOutOfBandAgent(new TwitterOfficialKeys());
         }
 

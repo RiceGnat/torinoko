@@ -8,14 +8,16 @@ namespace Twitter
 {
 	public interface ITwitter
 	{
+		ulong UserId { get; }
 		string UserHandle { get; }
+		TwitterStream UserStream { get; }
 
 		Task<bool> Authenticate();
 		Task<User> GetUser();
 		Task<User> GetUser(string userId, string screenName);
 		Task<IEnumerable<Tweet>> GetHomeTimeline();
 		Task<IEnumerable<Tweet>> GetMentions();
-		Task<TwitterStream> GetUserStream();
+		Task OpenUserStream();
 		Task GetActivity();
 	}
 }

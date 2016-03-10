@@ -19,12 +19,13 @@ namespace Twitter
 		private ITwitterConsumerKeyStore keys;
 		private ITwitterAuth auth;
 
+		#region JSON reader
 		private static readonly DataContractJsonSerializerSettings jsonSettings = new DataContractJsonSerializerSettings
 		{
 			DateTimeFormat = new DateTimeFormat("ddd MMM dd HH:mm:ss +0000 yyyy")
 		};
 
-		private static T ReadJSON<T>(string json)
+		public static T ReadJSON<T>(string json)
 		{
 			MemoryStream stream = new MemoryStream();
 			StreamWriter writer = new StreamWriter(stream);
@@ -36,8 +37,12 @@ namespace Twitter
 
 			try
 			{
-				DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(Tweet[]), jsonSettings);
+				DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(T), jsonSettings);
 				obj = (T)js.ReadObject(stream);
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Debug.WriteLine(ex.Message);
 			}
 			finally
 			{
@@ -46,7 +51,13 @@ namespace Twitter
 
 			return obj;
 		}
+		#endregion
 
+		#region Authentication
+		public ulong UserId
+		{
+			get { return Convert.ToUInt64(auth.UserId); }
+		}
 		public string UserHandle
 		{
 			get { return auth.ScreenName; }
@@ -67,7 +78,9 @@ namespace Twitter
 				return false;
 			}
 		}
+		#endregion
 
+		#region REST API
 		public async Task<User> GetUser() => await GetUser(auth.UserId, auth.ScreenName);
 
 		public async Task<User> GetUser(string userId, string screenName)
@@ -92,12 +105,18 @@ namespace Twitter
 		{
 			string response = await auth.AuthorizedGet(TwitterEndpoints.GetActivityAboutMe);
 		}
+		#endregion
 
-		public async Task<TwitterStream> GetUserStream()
+		#region Streaming API
+		public TwitterStream UserStream { get; private set; }
+
+		public async Task OpenUserStream()
 		{
 			IInputStream stream = await auth.AuthorizedGetStream(TwitterEndpoints.GetUserStream);
-			return new TwitterStream(stream);
+			UserStream = new TwitterStream(stream);
+			UserStream.StartTask();
 		}
+		#endregion
 
 		private TwitterAgent() { }
 

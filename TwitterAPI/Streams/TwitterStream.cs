@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
+using Twitter.Objects;
 
 namespace Twitter.Streams
 {
@@ -14,6 +15,15 @@ namespace Twitter.Streams
 		Site,
 		Public
 	}
+
+	public class TwitterStreamMessage
+	{
+		public TwitterStreamType SourceStreamType { get; set; }
+		public string OriginalText { get; set; }
+		public UserStreamMessage UserMessage { get; set; }
+	}
+
+	public delegate void TwitterStreamMessageHandler(TwitterStreamMessage message);
 
 	public class TwitterStream
 	{
@@ -25,28 +35,47 @@ namespace Twitter.Streams
 
 		private async Task Read()
 		{
+			// Capture loop
 			while (TaskRunning)
 			{
-				string line = await reader.ReadLineAsync();
+				// Read line from stream
+				string messageStr = await reader.ReadLineAsync();
 
-#if DEBUG
-				System.Diagnostics.Debug.WriteLine(line);
-#endif
+				// Don't parse blank keepalives
+				if (!String.IsNullOrWhiteSpace(messageStr) && messageStr != "\n")
+				{
+					TwitterStreamMessage message = new TwitterStreamMessage();
+
+					message.SourceStreamType = Type;
+					message.OriginalText = messageStr;
+					
+					switch (Type)
+					{
+						case TwitterStreamType.User:
+							message.UserMessage = TwitterAgent.ReadJSON<UserStreamMessage>(messageStr);
+							break;
+					}
+
+					// Invoke delegates
+					MessageReceived.Invoke(message);
+				}
 			}
 		}
 
-		public void StartTask()
+		public event TwitterStreamMessageHandler MessageReceived;
+
+		internal void StartTask()
 		{
 			TaskRunning = true;
 			readTask = Task.Run(Read);
 		}
 
-		public void StopTask()
+		internal void StopTask()
 		{
 			TaskRunning = false;
 		}
 
-		public TwitterStream(IInputStream stream, TwitterStreamType type = TwitterStreamType.User)
+		internal TwitterStream(IInputStream stream, TwitterStreamType type = TwitterStreamType.User)
 		{
 			Type = type;
 			reader = new StreamReader(stream.AsStreamForRead());
