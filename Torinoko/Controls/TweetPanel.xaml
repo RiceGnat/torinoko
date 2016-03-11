@@ -5,9 +5,7 @@
     xmlns:local="using:Torinoko.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
@@ -54,6 +52,41 @@
             <Style x:Key="TweetText" TargetType="TextBlock" BasedOn="{StaticResource Body}">
                 <Setter Property="TextWrapping" Value="WrapWholeWords" />
             </Style>
+            <Style x:Key="MediaPreview" TargetType="Image">
+                <Setter Property="Stretch" Value="UniformToFill" />
+            </Style>
+            <Style x:Key="MediaPreviewFull" TargetType="Image" BasedOn="{StaticResource MediaPreview}">
+                <Setter Property="Grid.Row" Value="0" />
+                <Setter Property="Grid.Column" Value="0" />
+                <Setter Property="Grid.ColumnSpan" Value="3" />
+                <Setter Property="Grid.RowSpan" Value="3" />
+            </Style>
+            <Style x:Key="MediaPreviewLeft" TargetType="Image" BasedOn="{StaticResource MediaPreview}">
+                <Setter Property="Grid.Row" Value="0" />
+                <Setter Property="Grid.Column" Value="0" />
+                <Setter Property="Grid.RowSpan" Value="3" />
+            </Style>
+            <Style x:Key="MediaPreviewRight" TargetType="Image" BasedOn="{StaticResource MediaPreview}">
+                <Setter Property="Grid.Row" Value="0" />
+                <Setter Property="Grid.Column" Value="2" />
+                <Setter Property="Grid.RowSpan" Value="3" />
+            </Style>
+            <Style x:Key="MediaPreviewUpperLeft" TargetType="Image" BasedOn="{StaticResource MediaPreview}">
+                <Setter Property="Grid.Row" Value="0" />
+                <Setter Property="Grid.Column" Value="0" />
+            </Style>
+            <Style x:Key="MediaPreviewUpperRight" TargetType="Image" BasedOn="{StaticResource MediaPreview}">
+                <Setter Property="Grid.Row" Value="0" />
+                <Setter Property="Grid.Column" Value="2" />
+            </Style>
+            <Style x:Key="MediaPreviewLowerLeft" TargetType="Image" BasedOn="{StaticResource MediaPreview}">
+                <Setter Property="Grid.Row" Value="2" />
+                <Setter Property="Grid.Column" Value="0" />
+            </Style>
+            <Style x:Key="MediaPreviewLowerRight" TargetType="Image" BasedOn="{StaticResource MediaPreview}">
+                <Setter Property="Grid.Row" Value="2" />
+                <Setter Property="Grid.Column" Value="2" />
+            </Style>
             <Style x:Key="ActionIcon" TargetType="TextBlock" BasedOn="{StaticResource Sub2}">
                 <Setter Property="TextAlignment" Value="Center" />
             </Style>
@@ -97,6 +130,19 @@
                            Grid.Column="2" />
             </Grid>
             <TextBlock x:Name="TweetText" Text="Tweet contents" Style="{StaticResource TweetText}" />
+            <Grid x:Name="MediaPreviews" Margin="0,5,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Image Source="http://placehold.it/400x600" Style="{StaticResource MediaPreviewFull}" />
+            </Grid>
         </StackPanel>
 
         <Grid x:Name="ActionGroup" Margin="0,0,10,10"

@@ -115,6 +115,7 @@
     <Compile Include="TorinokoConsumerKeys.cs" />
     <Compile Include="Twitter.cs" />
     <Compile Include="TwitterOfficialKeys.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

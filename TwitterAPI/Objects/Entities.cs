@@ -15,25 +15,25 @@ namespace Twitter.Objects
 		/// Represents hashtags which have been parsed out of the tweet text.
 		/// </summary>
 		[DataMember(Name = "hashtags")]
-		public object[] Hashtags { get; set; }
+		public Hashtag[] Hashtags { get; set; }
 
 		/// <summary>
 		/// Represents media elements uploaded with the tweet.
 		/// </summary>
 		[DataMember(Name = "media")]
-		public object[] Media { get; set; }
+		public Media[] Media { get; set; }
 
 		/// <summary>
 		/// Represents URLs included in the text of a tweet or within textual fields of a user object. 
 		/// </summary>
 		[DataMember(Name = "urls")]
-		public object[] Urls { get; set; }
+		public Url[] Urls { get; set; }
 
 		/// <summary>
 		/// Represents other Twitter users mentioned in the text of the tweet.
 		/// </summary>
 		[DataMember(Name = "user_mentions")]
-		public object[] UserMentions { get; set; }
+		public UserMention[] UserMentions { get; set; }
 	}
 
 	/// <summary>
