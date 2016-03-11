@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
+using Newtonsoft.Json;
 using WindowsOAuth;
 using Twitter.Authentication;
 using Twitter.Objects;
@@ -20,36 +21,14 @@ namespace Twitter
 		private ITwitterAuth auth;
 
 		#region JSON reader
-		private static readonly DataContractJsonSerializerSettings jsonSettings = new DataContractJsonSerializerSettings
+		private static readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings
 		{
-			DateTimeFormat = new DateTimeFormat("ddd MMM dd HH:mm:ss +0000 yyyy")
+			DateFormatString = "ddd MMM dd HH:mm:ss +0000 yyyy"
 		};
 
 		public static T ReadJSON<T>(string json)
 		{
-			MemoryStream stream = new MemoryStream();
-			StreamWriter writer = new StreamWriter(stream);
-			writer.Write(json);
-			writer.Flush();
-			stream.Position = 0;
-
-			T obj = default(T);
-
-			try
-			{
-				DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(T), jsonSettings);
-				obj = (T)js.ReadObject(stream);
-			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-			finally
-			{
-				stream.Dispose();
-			}
-
-			return obj;
+			return JsonConvert.DeserializeObject<T>(json, jsonSettings);
 		}
 		#endregion
 

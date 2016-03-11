@@ -74,6 +74,7 @@ namespace Torinoko
 				else
 				{
 					System.Diagnostics.Debug.WriteLine(message.UserMessage.EventName);
+					Tweet tweet = message.UserMessage.GetTargetObject<Tweet>();
 				}
 			};
 			//await Twitter.DefaultAgent.GetActivity();

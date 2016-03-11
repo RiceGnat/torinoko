@@ -112,6 +112,7 @@
     <Compile Include="Authentication\TwitterOAuthEndpoints.cs" />
     <Compile Include="Objects\Entities.cs" />
     <Compile Include="Objects\Place.cs" />
+    <Compile Include="Objects\StreamWarning.cs" />
     <Compile Include="Objects\User.cs" />
     <Compile Include="Objects\UserEntities.cs" />
     <Compile Include="ITwitter.cs" />
